@@ -7,6 +7,7 @@ This API provides real-time cryptocurrency data and statistics. It fetches data 
 ## Base URL
 
 All API requests should be made to the following base URL:
+`https://koinx-assign-tegj.onrender.com/api/`
 
 ## Endpoints
 
