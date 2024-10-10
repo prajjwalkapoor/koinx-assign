@@ -46,7 +46,34 @@ async function getLatestCryptoData(coin) {
   }
 }
 
+async function calculateStandardDeviation(coin) {
+  try {
+    const prices = await Crypto.find({ id: coin })
+      .sort({ timestamp: -1 })
+      .limit(100)
+      .select("price");
+
+    if (prices.length === 0) {
+      throw new Error("No data available for the cryptocurrency");
+    }
+
+    const values = prices.map((p) => p.price);
+    console.log("values", values);
+    const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+    const squaredDifferences = values.map((value) => Math.pow(value - mean, 2));
+    const variance =
+      squaredDifferences.reduce((sum, value) => sum + value, 0) / values.length;
+    const standardDeviation = Math.sqrt(variance);
+
+    return standardDeviation;
+  } catch (error) {
+    logger.error("Error calculating standard deviation:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   updateCryptoData,
   getLatestCryptoData,
+  calculateStandardDeviation,
 };
